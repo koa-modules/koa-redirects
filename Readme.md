@@ -6,7 +6,8 @@
 
 ### koa-redirects
 
-* redirect with `prefix`.
+* redirect with `prefix`
+* `map` support
 
 ### Example
 
@@ -16,7 +17,10 @@ const koa = require('koa')
 const app = koa()
 
 redirects(app, {
-  prefix: '/api/v2'
+  prefix: '/api/v2',
+  map: {
+    'auth': 'http://some.com/api/oauth'
+  }
 })
 
 // or
@@ -24,6 +28,10 @@ redirects(app, {
 
 app.use(function*() {
   this.redirects('/bar')
+})
+
+app.use(function*() {
+  this.redirects('auth')
 })
 ```
 

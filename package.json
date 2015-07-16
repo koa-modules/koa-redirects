@@ -1,6 +1,6 @@
 {
   "name": "koa-redirects",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "redirect with prefix for koa",
   "main": "index.js",
   "directories": {

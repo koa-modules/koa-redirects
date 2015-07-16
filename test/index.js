@@ -4,8 +4,64 @@ const request = require('supertest')
 const redirects = require('..')
 const koa = require('koa')
 
-describe('koa-redirects', function() {
-  describe('prefix', function() {
+describe('## koa-redirects', function() {
+  describe('# map', function() {
+    it('basic', function(done) {
+      let app = koa()
+      redirects(app, {
+        map: {
+          'auth': 'http://some.com/api/auth'
+        }
+      })
+
+      app.use(function*() {
+        this.redirects('auth')
+      })
+
+      request(app.listen())
+        .get('/')
+        .expect('Location', 'http://some.com/api/auth')
+        .expect(302, done)
+    })
+
+    it('basic', function(done) {
+      let app = koa()
+      redirects(app, {
+        prefix: '/api/v2/',
+        map: {}
+      })
+
+      app.use(function*() {
+        this.redirects('toString')
+      })
+
+      request(app.listen())
+        .get('/')
+        .expect('Location', '/api/v2/toString')
+        .expect(302, done)
+    })
+
+    it('basic', function(done) {
+      let app = koa()
+      redirects(app, {
+        prefix: '/api/v2/',
+        map: {
+          'toString': 'http://some.com/api/auth'
+        }
+      })
+
+      app.use(function*() {
+        this.redirects('toString')
+      })
+
+      request(app.listen())
+        .get('/')
+        .expect('Location', 'http://some.com/api/auth')
+        .expect(302, done)
+    })
+  })
+
+  describe('# prefix', function() {
     it('prefix: /api/v2/; redirects: /bar', function(done) {
       let app = koa()
       redirects(app, '/api/v2/')

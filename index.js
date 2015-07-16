@@ -1,6 +1,6 @@
 'use strict'
 
-const URL = require('url')
+const resolve = require('url').resolve
 
 module.exports = function(app, opts) {
   let prefix
@@ -12,6 +12,8 @@ module.exports = function(app, opts) {
 
   opts = opts || {}
 
+  let map = opts.map || {}
+
   prefix = prefix ? prefix : opts.prefix || ''
 
   /**
@@ -19,11 +21,15 @@ module.exports = function(app, opts) {
    * @param {String} alt
    */
   app.context.redirects = function(url, alt) {
+    if (map.hasOwnProperty(url)) {
+      return this.redirect(map[url])
+    }
+
     if (url === 'back') {
       return this.redirect(url, alt)
     }
 
-    url = URL.resolve(prefix, url)
+    url = resolve(prefix, url)
 
     this.redirect(url, alt)
   }
